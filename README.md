@@ -16,7 +16,5 @@ This project develops and evaluates multiple recommendation algorithms using Ama
 
 ## Dataset
 
-This project utilizes the dataset from the following study:
-
 > **Hou, Yupeng, et al.** "Bridging Language and Items for Retrieval and Recommendation." *arXiv preprint arXiv:2403.03952* (2024).  
 > [https://arxiv.org/abs/2403.03952](https://arxiv.org/abs/2403.03952)
