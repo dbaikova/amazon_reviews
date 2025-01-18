@@ -1,15 +1,8 @@
+import re
 import numpy as np
-from nltk.corpus import stopwords
+from nltk.corpus import stopwords, words
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
-
-
-def tokenize_and_lemmatize(text, stop_words, lemmatizer):
-    tokens = word_tokenize(text)
-    filtered_tokens = [
-        lemmatizer.lemmatize(word) for word in tokens if word not in stop_words
-    ]
-    return " ".join(filtered_tokens)
 
 
 def build_full_review_col(
@@ -32,10 +25,10 @@ def pre_process_categories(row, col):
 
 def combine_text_features(row, col1="text", col2="features", col3="descriprion"):
 
-    if isinstance(row[col1], str) and row[col1].strip():
-        description = row[col1]
-    elif isinstance(row[col1], (list, np.ndarray)):
-        description = " ".join(str(element) for element in row[col1])
+    if isinstance(row[col3], str) and row[col3].strip():
+        description = row[col3]
+    elif isinstance(row[col3], (list, np.ndarray)):
+        description = " ".join(str(element) for element in row[col3])
     else:
         description = ""
 
@@ -61,3 +54,30 @@ def pre_process_text(df, input_col="text", output_col="pre_processed_text"):
     )
 
     return df
+
+def tokenize_and_lemmatize(text, stop_words, lemmatizer):
+    tokens = word_tokenize(text)
+    filtered_tokens = [
+        lemmatizer.lemmatize(word) for word in tokens if word not in stop_words
+    ]
+    return " ".join(filtered_tokens)
+
+
+def pre_process_query(query):
+    """
+    Preprocess a single query string.
+    """
+    stop_words = set(stopwords.words("english"))
+    lemmatizer = WordNetLemmatizer()
+
+    query = query.lower()
+    query = re.sub(r"[^a-z\s]", "", query)
+
+    tokens = word_tokenize(query)
+
+    # remove stopwords and lemmatize
+    processed_tokens = [
+        lemmatizer.lemmatize(token) for token in tokens if token not in stop_words
+    ]
+
+    return " ".join(processed_tokens)
